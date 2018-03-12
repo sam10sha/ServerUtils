@@ -422,10 +422,21 @@ namespace ServerUtils
         {
             if (Handler != null)
             {
-                myMainThread.Send((object sender) =>
+                try
                 {
-                    Handler();
-                }, null);
+                    myMainThread.Send((object sender) =>
+                    {
+                        Handler();
+                    }, null);
+                }
+#if DEBUG
+                catch (Exception e)
+                {
+                    Debug.WriteLine("CoreServer[InvokeServerStatusHandlerMainThread]: " + e.Message);
+                }
+#else
+                catch (Exception) { }
+#endif
             }
         }
     }
